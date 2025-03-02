@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>仓储管理系统</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        /* 侧栏导航样式 */
+        nav {
+            width: 250px;
+            background-color: #2c3e50;
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: width 0.3s ease;
+            overflow-y: auto;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav li {
+            padding: 15px 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        nav li:hover {
+            background-color: #34495e;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        nav a i {
+            margin-right: 10px;
+        }
+
+        /* 主要内容区域样式 */
+        main {
+            flex: 1;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 媒体查询，当屏幕宽度小于 768px 时的样式调整 */
+        @media (max-width: 768px) {
+            nav {
+                width: 60px;
+            }
+
+            nav li span {
+                display: none;
+            }
+
+            nav a i {
+                margin-right: 0;
+            }
+        }
+    </style>
+    <!-- 引入 Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body>
+<nav>
+    <ul>
+        <li><a href="H.add.html"><i class="fa-solid fa-plus"></i><span>新增仓库</span></a></li>
+        <li><a href="H.delete.html"><i class="fa-solid fa-trash"></i><span>删除仓库</span></a></li>
+        <li><a href="H.update.html"><i class="fa-solid fa-pen"></i><span>修改仓库基本信息</span></a></li>
+        <li><a href="G.add.html"><i class="fa-solid fa-plus"></i><span>新增物资类别</span></a></li>
+        <li><a href="G.delete.html"><i class="fa-solid fa-trash"></i><span>删除物资类别</span></a></li>
+        <li><a href="G.update.html"><i class="fa-solid fa-pen"></i><span>修改物资类别基本信息</span></a></li>
+        <li><a href="S.in.html"><i class="fa-solid fa-box-arrow-in-down"></i><span>入库操作</span></a></li>
+        <li><a href="#" data-url="out.html"><i class="fa-solid fa-box-arrow-up"></i><span>出库操作</span></a></li>
+        <li><a href="#" data-url="statistics.html"><i class="fa-solid fa-chart-bar"></i><span>统计查询</span></a></li>
+    </ul>
+</nav>
+<main id="main-content">
+    <h1>仓储管理系统</h1>
+</main>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        var role = localStorage.getItem('role');
+        var admin1Items = document.querySelectorAll('nav li:nth-child(-n+6)');
+        var admin2Items = document.querySelectorAll('nav li:nth-child(n+7)');
+
+        if (role === '管理员') {
+            admin2Items.forEach(function (element) {
+                element.style.display = 'none';
+            });
+        }
+        if (role === '仓库管理人员') {
+            admin1Items.forEach(function (element) {
+                element.style.display = 'none';
+            });
+        }
+
+        const navLinks = document.querySelectorAll('nav a');
+        const mainContent = document.getElementById('main-content');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', async function (e) {
+                e.preventDefault();
+                let url = this.getAttribute('href');
+                if (!url) {
+                    url = this.dataset.url;
+                }
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        const content = await response.text();
+                        mainContent.innerHTML = content;
+
+                        // 执行动态加载页面中的脚本
+                        const scripts = mainContent.querySelectorAll('script');
+                        scripts.forEach(script => {
+                            const newScript = document.createElement('script');
+                            newScript.textContent = script.textContent;
+                            document.body.appendChild(newScript);
+                            script.remove();
+                        });
+
+                        // 事件委托处理公共交互逻辑
+                        mainContent.addEventListener('click', function (event) {
+                            // 处理模态框关闭
+                            if (event.target.classList.contains('close')) {
+                                const modal = event.target.closest('.modal');
+                                if (modal) modal.style.display = 'none';
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading page:', error);
+                }
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

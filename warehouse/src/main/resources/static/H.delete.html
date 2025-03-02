@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>删除仓库</title>
+  <style>
+    /* 整体页面样式 */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 标题样式 */
+    h1 {
+      color: #333;
+    }
+
+    /* 根容器样式，带有边框的区域 */
+    #tablecontainer {
+      width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 表单内标签样式 */
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    /* 表单输入框样式 */
+    form input[type="text"],
+    form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* 单选按钮容器样式 */
+    #sex label {
+      margin-right: 15px;
+    }
+
+    /* 提交按钮样式 */
+    form button[type="submit"] {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    form button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* 返回主界面按钮所在链接样式 */
+    a {
+      text-decoration: none;
+    }
+
+    /* 返回主界面按钮样式 */
+    button {
+      background-color: #ccc;
+      color: #333;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #aaa;
+    }
+
+    /* 模态框样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 30%;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+<div id="tablecontainer">
+  <h1 style="text-align: center">删除仓库</h1>
+  <div id="formTable"></div>
+  <div>
+    <a href="index.html">
+      <button>返回主界面</button>
+    </a>
+  </div>
+</div>
+
+<!-- 确认删除模态框 -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <p>确认删除该仓库吗？</p>
+    <button id="confirmDelete">确认</button>
+    <button id="cancelDelete">取消</button>
+  </div>
+</div>
+
+<script>
+  (function init() {
+    let currentDeleteId; // 将变量声明放在函数作用域内
+
+    fetch('house/getAll', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.msg === 'success') {
+                generateTable(data.data);
+              } else {
+                alert("此结果不存在");
+              }
+            })
+            .catch(error => {
+              alert("请求失败，请重试");
+              console.error(error);
+            });
+
+    // 确认删除逻辑
+    document.getElementById('confirmDelete').addEventListener('click', () => {
+      fetch('house/delete/' + currentDeleteId, {
+        method: 'DELETE',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: currentDeleteId
+        })
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.msg === 'success') {
+                  alert("删除成功");
+                } else {
+                  alert("删除失败 " + data.msg);
+                }
+              })
+              .catch(error => {
+                alert("请求失败，请重试");
+                console.error(error);
+              });
+      document.getElementById('confirmModal').style.display = 'none';
+    });
+
+    // 取消删除逻辑
+    document.getElementById('cancelDelete').addEventListener('click', () => {
+      document.getElementById('confirmModal').style.display = 'none';
+    });
+
+    function generateTable(data) {
+      const tableContainer = document.getElementById("formTable");
+      const table = document.createElement("table");
+      const tableBody = document.createElement("tbody");
+
+      let row = document.createElement("tr");
+      row.innerHTML = '<td>仓库编号</td><td>仓库名称</td><td>操作</td>';
+      tableBody.appendChild(row);
+
+      for (let i = 0; i < data.length; i++) {
+        row = document.createElement("tr");
+        row.innerHTML = `<td>${data[i].id}</td><td>${data[i].name}</td><td><button onclick="showConfirmModal('${data[i].id}')">删除</button></td>`;
+        tableBody.appendChild(row);
+      }
+
+      table.appendChild(tableBody);
+      tableContainer.appendChild(table);
+    }
+
+    window.showConfirmModal = function (id) {
+      currentDeleteId = id;
+      document.getElementById('confirmModal').style.display = 'block';
+    };
+  })();
+</script>
+</body>
+</html>

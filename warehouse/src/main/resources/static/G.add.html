@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>新增物资类别</title>
+  <style>
+    /* 整体页面样式 */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 标题样式 */
+    h1 {
+      color: #333;
+    }
+
+    /* 根容器样式，带有边框的区域 */
+    #root {
+      width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 表单内标签样式 */
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    /* 表单输入框样式 */
+    form input[type="text"],
+    form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    /* 单选按钮容器样式 */
+    #sex label {
+      margin-right: 15px;
+    }
+
+    /* 提交按钮样式 */
+    form button[type="submit"] {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    form button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* 返回主界面按钮所在链接样式 */
+    a {
+      text-decoration: none;
+    }
+
+    /* 返回主界面按钮样式 */
+    button {
+      background-color: #ccc;
+      color: #333;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #aaa;
+    }
+
+    /* 模态框样式 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 30%;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+<h1>新增物资类别</h1>
+<div id="root" style="border: 1px solid black">
+  <table id="dataTable">
+    <thead>
+    <tr>
+      <th>物资类别编号</th>
+      <th>物资类别名称</th>
+      <th>物资规格</th>
+      <th>物资材质</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 数据将动态插入这里 -->
+    </tbody>
+  </table>
+  <button id="addButton">新增物资类别</button>
+  <div>
+    <a href="index.html">
+      <button>返回主界面</button>
+    </a>
+  </div>
+</div>
+
+<!-- 模态框 -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>新增物资类别</h2>
+    <form id="addForm">
+      <label for="number">物资类别编号:</label>
+      <input type="text" id="number" name="number" oninput="limitInput(this)" maxlength=8 required >
+      <label for="name">物资类别名称:</label>
+      <input type="text" id="name" name="name" required>
+      <label for="standards">物资规格:</label>
+      <input type="text" id="standards" name="standards" required>
+      <label for="material">物资材质:</label>
+      <input type="text" id="material" name="material" required>
+
+      <button type="submit">提交</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  (async function init() {
+    try {
+      const response = await fetch('goods/getAll');
+      if (!response.ok) {
+        throw new Error('网络响应不正常');
+      }
+      const data = await response.json();
+      const tableBody = document.querySelector('#dataTable tbody');
+      tableBody.innerHTML = '';
+
+      if (data.code === 1) { // 假设成功状态码为 1
+        const warehouses = data.data;
+        warehouses.forEach(item => {
+          const row = document.createElement('tr');
+          const codeCell = document.createElement('td');
+          codeCell.textContent = item.id;
+          const nameCell = document.createElement('td');
+          nameCell.textContent = item.name;
+          const thingCell = document.createElement('td');
+          thingCell.textContent = item.standards;
+          const numCell = document.createElement('td');
+          numCell.textContent = item.material;
+
+          row.appendChild(codeCell);
+          row.appendChild(nameCell);
+          row.appendChild(thingCell);
+          row.appendChild(numCell);
+
+          tableBody.appendChild(row);
+        });
+      } else {
+        alert(data.msg); // 显示错误信息
+      }
+
+      // 绑定事件监听器
+      const addButton = document.getElementById('addButton');
+      const modal = document.getElementById('myModal');
+      const closeBtn = document.querySelector('.close');
+
+      addButton.addEventListener('click', () => {
+        modal.style.display = 'block';
+      });
+
+      closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+      });
+
+      window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+
+      // 表单提交处理
+      document.getElementById("addForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const id = document.getElementById("number");
+        const name = document.getElementById("name");
+        const standards = document.getElementById("standards");
+        const material = document.getElementById("material");
+        try {
+          const response = await fetch("goods/add", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              id: id.value,
+              name: name.value,
+              standards: standards.value,
+              material: material.value,
+            })
+          });
+          const data = await response.json();
+          if (data.msg === 'success') {
+            alert("添加成功");
+            // 刷新表格
+            const newResponse = await fetch('goods/getAll');
+            const newData = await newResponse.json();
+            tableBody.innerHTML = '';
+            if (newData.code === 1) {
+              const newWarehouses = newData.data;
+              newWarehouses.forEach(item => {
+                const row = document.createElement('tr');
+                const codeCell = document.createElement('td');
+                codeCell.textContent = item.id;
+                const nameCell = document.createElement('td');
+                nameCell.textContent = item.name;
+                const thingCell = document.createElement('td');
+                thingCell.textContent = item.thing;
+                const numCell = document.createElement('td');
+                numCell.textContent = item.num;
+
+                row.appendChild(codeCell);
+                row.appendChild(nameCell);
+                row.appendChild(thingCell);
+                row.appendChild(numCell);
+
+                tableBody.appendChild(row);
+              });
+            } else {
+              alert(newData.msg);
+            }
+            modal.style.display = 'none';
+          }
+        } catch (error) {
+          alert("请求失败");
+        }
+      });
+    } catch (error) {
+      alert("数据加载失败");
+      console.error(error);
+    }
+  })();
+
+  function limitInput(input) {
+    const value = input.value;
+    if (value.length > 8) input.value = value.slice(0, 8);
+    input.setCustomValidity(value.length < 8 ? '编码为八位数字' : '');
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>入库</title>
+    <style>
+        /* 整体页面样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 标题样式 */
+        h1 {
+            color: #333;
+        }
+
+        /* 根容器样式，带有边框的区域 */
+        #root {
+            width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 表单内标签样式 */
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* 表单输入框样式 */
+        form input[type="text"],
+        form input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* 单选按钮容器样式 */
+
+        #sex label {
+            margin-right: 15px;
+        }
+
+        /* 提交按钮样式 */
+        form button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* 返回主界面按钮所在链接样式 */
+        a {
+            text-decoration: none;
+        }
+
+        /* 返回主界面按钮样式 */
+        button {
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center">入库</h1>
+<div id="root" style="border: 1px solid black">
+    <h2>入库</h2>
+    <form id="addForm">
+        <label for="num">台账编号:</label>
+        <input type="text" id="num" name="num" oninput="limit(this)" maxlength=12 required >
+        <label for="goodid">物资编号:</label>
+        <input type="text" id="goodid" name="goodid" oninput="limitInput(this)" maxlength=8 required >
+        <label for="name">物资名称:</label>
+        <input type="text" id="name" name="name" required>
+        <label for="standards">物资规格:</label>
+        <input type="text" id="standards" name="standards" required>
+        <label for="material">物资材质:</label>
+        <input type="text" id="material" name="material" required>
+        <label for="supplier">供应商:</label>
+        <input type="text" id="supplier" name="supplier" required>
+        <label for="brand">品牌:</label>
+        <input type="text" id="brand" name="brand" required>
+        <label for="category">物资分类:</label>
+        <input type="text" id="category" name="category" required>
+        <label for="operate">操作:</label>
+        <input type="text" id="operate" name="operate" required>
+        <label for="unit">计量单位:</label>
+        <input type="text" id="unit" name="unit" required>
+        <label for="warehouse">仓库:</label>
+        <input type="text" id="warehouse" name="warehouse" required>
+        <label for="number">数量:</label>
+        <input type="text" id="number" name="number" required>
+
+        <button type="submit">提交</button>
+    </form>
+    <div>
+        <a href="index.html">
+            <button>返回主界面</button>
+        </a>
+    </div>
+</div>
+</body>
+<script>
+    document.getElementById("addForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const id=document.getElementById("num");
+        const goodid=document.getElementById("goodid");
+        const name = document.getElementById("name");
+        const standards=document.getElementById("standards");
+        const material=document.getElementById("material");
+        const supplier=document.getElementById("supplier");
+        const brand=document.getElementById("brand");
+        const category=document.getElementById("category");
+        const operate=document.getElementById("operate");
+        const unit=document.getElementById("unit");
+        const warehouse=document.getElementById("warehouse");
+        const number=document.getElementById("number");
+        fetch("bill/add",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id:id.value,
+                goodid:goodid.value,
+                name:name.value,
+                standards:standards.value,
+                material:material.value,
+                supplier:supplier.value,
+                brand:brand.value,
+                category:category.value,
+                operate:operate.value,
+                unit:unit.value,
+                warehouse:warehouse.value,
+                number:number.value,
+
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.msg === 'success') {
+                    alert("添加成功");
+                    console.log(data);
+                } else{
+                    alert("添加失败");
+                }
+            })
+            .catch(error => {
+                alert("请求失败，请重试");
+                console.error(error);
+            });
+        fetch("house/add",{
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name:warehouse.value,
+                num:number.value,
+
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.msg === 'success') {
+                    alert("添加成功");
+                    console.log(data);
+                } else{
+                    alert("添加失败");
+                }
+            })
+            .catch(error => {
+                alert("请求失败，请重试");
+                console.error(error);
+            });
+    });
+
+</script>
+<script>
+    function limit(input) {
+        const value = input.value;
+        if (value.length > 12) {
+            input.value = value.slice(0, 12);
+        }
+        if (value.length < 12) {
+            input.setCustomValidity('编码为四位年两位月两位日+顺序号（四位）');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+</script>
+<script>
+    function limitInput(input) {
+        const value = input.value;
+        if (value.length > 8) {
+            input.value = value.slice(0, 8);
+        }
+        if (value.length < 8) {
+            input.setCustomValidity('编码为八位数字');
+        } else {
+            input.setCustomValidity('');
+        }
+    }
+</script>
+</html>
