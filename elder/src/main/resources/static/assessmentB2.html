@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>能力评估</title>
+    <style>
+        /* 整体页面样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 标题样式 */
+        h1 {
+            color: #333;
+        }
+
+        /* 根容器样式，带有边框的区域 */
+        #root {
+            width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 表单内标签样式 */
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* 表单输入框样式 */
+        form input[type="text"]{
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* 单选按钮容器样式 */
+        #sex {
+            margin-bottom: 15px;
+        }
+
+        #sex label {
+            margin-right: 15px;
+        }
+
+        /* 提交按钮样式 */
+        form button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* 返回主界面按钮所在链接样式 */
+        a {
+            text-decoration: none;
+        }
+
+        /* 返回主界面按钮样式 */
+        button {
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center">能力评估</h1>
+<div id="root" style="border: 1px solid black">
+    <form id="addForm" >
+        <h2>二、精神状态评估表</h2>
+        <label for="cognition">1.认知功能</label>
+        <label>测验：“我说三样东西，请重复一遍，并记住，一会儿会问您”：苹果、手表、国旗</label><br>
+        <label>(1)画钟测验：“请您在这儿画一个圆形的时钟，在时钟上标出 10 点 45 分”</label><br>
+        <label>(2)回忆词语：“现在请您告诉我，刚才我要您记住的三样东西是什么？”（不必按顺序）</label><br>
+        <div id="cognition">
+            <label><input type="radio" name="cognition" value="0">画钟正确（画出一个闭锁圆，指针位置准确），且能回忆出 2-3 个词</label>
+            <label><input type="radio" name="cognition" value="1">画钟错误（画的圆不闭锁，或指针位置不准确），或只回忆出 0-1 个词</label>
+            <label><input type="radio" name="cognition" value="2">已确诊为认知障碍，如老年痴呆</label>
+        </div>
+        <label for="attack">2.攻击行为</label>
+        <div id="attack">
+            <label><input type="radio" name="attack" value="0">无身体攻击行为（如打/踢/推/咬/抓/摔东西）和语言攻击行为（如骂人、语言威胁、尖叫）</label>
+            <label><input type="radio" name="attack" value="1">每月有几次身体攻击行为，或每周有几次语言攻击行为</label>
+            <label><input type="radio" name="attack" value="2">每周有几次身体攻击行为，或每日有语言攻击行为</label>
+        </div>
+        <label for="depressed">3.抑郁症状</label>
+        <div id="depressed">
+            <label><input type="radio" name="depressed" value="0">无</label>
+            <label><input type="radio" name="depressed" value="1">情绪低落、不爱说话、不爱梳洗、不爱活动</label>
+            <label><input type="radio" name="depressed" value="2">有自杀念头或自杀行为</label>
+        </div>
+
+        <button type="submit">下一步</button>
+    </form>
+    <div>
+        <a href="index.html">
+            <button>返回主界面</button>
+        </a>
+    </div>
+</div>
+</body>
+<script>
+    document.getElementById("addForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const id = localStorage.getItem('id');
+        const cognition =document.querySelectorAll('input[name=cognition]');
+        let c;
+        cognition.forEach(radio => {
+            if (radio.checked) {
+                c = +radio.value;
+            }
+        });
+        const attack =document.querySelectorAll('input[name=attack]');
+        let a;
+        attack.forEach(radio => {
+            if (radio.checked) {
+                a = +radio.value;
+            }
+        });
+        const depressed =document.querySelectorAll('input[name=depressed]');
+        let d;
+        depressed.forEach(radio => {
+            if (radio.checked) {
+                d = +radio.value;
+            }
+        });
+        let sum = c+a+d;
+        let rank;
+        if(sum===0){
+            rank=0;
+        }else if(sum===1){
+            rank=1;
+        }else if(sum===2||sum===3){
+            rank=2;
+        }else if(sum>=4&&sum<=6){
+            rank=3;
+        }
+
+        fetch("ass/add2", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: id,
+                score2: sum,
+                rank2: rank,
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.msg === 'success') {
+                    alert("提交成功");
+                    localStorage.setItem('b2',rank);
+                    console.log(data);
+                    location.href="assessmentB3.html";
+                } else {
+                    alert("提交失败(b2)");
+                }
+            })
+            .catch(error => {
+                alert("请求失败，请重试(b2)");
+                console.error(error);
+            });
+    })
+</script>
+</html>

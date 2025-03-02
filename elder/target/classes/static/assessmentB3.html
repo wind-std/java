@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>能力评估</title>
+  <style>
+    /* 整体页面样式 */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 标题样式 */
+    h1 {
+      color: #333;
+    }
+
+    /* 根容器样式，带有边框的区域 */
+    #root {
+      width: 1000px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: white;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 表单内标签样式 */
+    form label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    /* 表单输入框样式 */
+    form input[type="text"]{
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    #sex label {
+      margin-right: 15px;
+    }
+
+    /* 提交按钮样式 */
+    form button[type="submit"] {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    form button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* 返回主界面按钮所在链接样式 */
+    a {
+      text-decoration: none;
+    }
+
+    /* 返回主界面按钮样式 */
+    button {
+      background-color: #ccc;
+      color: #333;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #aaa;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align: center">能力评估</h1>
+<div id="root" style="border: 1px solid black">
+  <form id="addForm" >
+    <h2>三、感知觉与沟通评估表</h2>
+    <label for="consciousness">1.意识水平</label>
+    <div id="consciousness">
+      <label><input type="radio" name="consciousness" value="0">神志清醒，对周围环境警觉</label>
+      <label><input type="radio" name="consciousness" value="1">嗜睡，表现为睡眠状态过度延长。当呼唤或推动其肢体时可唤醒，并能进行正确的交谈或执行指令，停止刺激后又继续入睡</label>
+      <label><input type="radio" name="consciousness" value="2">昏睡，一般的外界刺激不能使其觉醒，给予较强烈的刺激时可有短时的意识清醒，醒后可简短回答提问，当刺激减弱后又很快进入睡眠状态</label>
+      <label><input type="radio" name="consciousness" value="3">昏迷，处于浅昏迷时对疼痛刺激有回避和痛苦表情；处于深昏迷时对刺激无反应（若评定为昏迷，直接评定为重度失能，可不进行以下项目的评估）</label>
+    </div>
+    <label for="vision">2.视力：若平日带老花镜或近视镜，应在佩戴眼镜的情况下评估</label>
+    <div id="vision">
+      <label><input type="radio" name="vision" value="0">能看清书报上的标准字体</label>
+      <label><input type="radio" name="vision" value="1">能看清楚大字体，但看不清书报上的标准字体</label>
+      <label><input type="radio" name="vision" value="2">视力有限，看不清报纸大标题，但能辨认物体</label>
+      <label><input type="radio" name="vision" value="3">辨认物体有困难，但眼睛能跟随物体移动，只能看到光、颜色和形状</label>
+      <label><input type="radio" name="vision" value="4">没有视力，眼睛不能跟随物体移动</label>
+    </div>
+    <label for="hearing">3.3 听力：若平时佩戴助听器，应在佩戴助听器的情况下评估</label>
+    <div id="hearing">
+      <label><input type="radio" name="hearing" value="0">可正常交谈，能听到电视、电话、门铃的声音</label>
+      <label><input type="radio" name="hearing" value="1">在轻声说话或说话距离超过 2 米时听不清</label>
+      <label><input type="radio" name="hearing" value="2">正常交流有些困难，需在安静的环静或大声说话才能听到</label>
+      <label><input type="radio" name="hearing" value="3">讲话者大声说话或说话很慢，才能部分听见</label>
+      <label><input type="radio" name="hearing" value="4">完全听不见</label>
+    </div>
+    <label for="communication">4.沟通交流:包括非语言沟通</label>
+    <div id="communication">
+      <label><input type="radio" name="communication" value="0">无困难，能与他人正常沟通和交流</label>
+      <label><input type="radio" name="communication" value="1">能够表达自己的需要及理解别人的话，但需要增加时间或给予帮助</label>
+      <label><input type="radio" name="communication" value="2">表达需要或理解有困难，需频繁重复或简化口头表达</label>
+      <label><input type="radio" name="communication" value="3">不能表达需要或理解他人的话</label>
+    </div>
+
+    <button type="submit">下一步</button>
+  </form>
+  <div>
+    <a href="index.html">
+      <button>返回主界面</button>
+    </a>
+  </div>
+</div>
+</body>
+<script>
+  document.getElementById("addForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const id=localStorage.getItem('id');
+    const consciousness =document.querySelectorAll('input[name=consciousness]');
+    let c;
+    consciousness.forEach(radio => {
+      if (radio.checked) {
+        c = +radio.value;
+      }
+    });
+    const vision =document.querySelectorAll('input[name=vision]');
+    let v;
+    vision.forEach(radio => {
+      if (radio.checked) {
+        v = +radio.value;
+      }
+    });
+    const hearing =document.querySelectorAll('input[name=hearing]');
+    let h;
+    hearing.forEach(radio => {
+      if (radio.checked) {
+        h = +radio.value;
+      }
+    });
+    const communication =document.querySelectorAll('input[name=communication]');
+    let com;
+    communication.forEach(radio => {
+      if (radio.checked) {
+        com = +radio.value;
+      }
+    });
+    const sum=c+v+h+com;
+    let rank;
+    if(c===0&&(v===0||v===1)&&(h===0||h===1)){
+      rank=0;
+    }else if(c===0&&(v===2||h===2||com===1)){
+      rank=1;
+    }else if((c===0&&(v===3||h===3||com===2))||(c===1&&(v<=3||h<=3)&&com<=2)){
+      rank=2;
+    }else if(((c===0||c===1)&&(v===4||h===4||com===3))||c===2||c===3){
+      rank=3;
+    }
+
+    fetch("ass/add3", {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id:id,
+        score3: sum,
+        rank3: rank,
+      })
+    })
+            .then(res => res.json())
+            .then(data => {
+              if (data.msg === 'success') {
+                alert("提交成功");
+                localStorage.setItem('b3',rank);
+                console.log(data);
+                location.href="assessmentB4.html";
+              } else {
+                alert("提交失败(b3)");
+              }
+            })
+            .catch(error => {
+              alert("请求失败，请重试(b3)");
+              console.error(error);
+            });
+  })
+</script>
+</html>

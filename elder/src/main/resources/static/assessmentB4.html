@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>能力评估</title>
+    <style>
+        /* 整体页面样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 标题样式 */
+        h1 {
+            color: #333;
+        }
+
+        /* 根容器样式，带有边框的区域 */
+        #root {
+            width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 表单内标签样式 */
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        /* 表单输入框样式 */
+        form input[type="text"]{
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #sex label {
+            margin-right: 15px;
+        }
+
+        /* 提交按钮样式 */
+        form button[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* 返回主界面按钮所在链接样式 */
+        a {
+            text-decoration: none;
+        }
+
+        /* 返回主界面按钮样式 */
+        button {
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center">能力评估</h1>
+<div id="root" style="border: 1px solid black">
+    <form id="addForm" >
+        <h2>四、社会参与评估表</h2>
+        <label for="living">1.生活能力</label>
+        <div id="living">
+            <label><input type="radio" name="living" value="0">除个人生活自理外（如饮食、洗漱、穿戴、二便），能料理家务（如做饭、洗衣）或当家管理事务</label>
+            <label><input type="radio" name="living" value="1">除个人生活自理外，能做家务，但欠好，家庭事务安排欠条理</label>
+            <label><input type="radio" name="living" value="2">个人生活能自理；只有在他人帮助下才能做些家务，但质量不好</label>
+            <label><input type="radio" name="living" value="3">个人基本生活事务能自理（如饮食、二便），在督促下可洗漱</label>
+            <label><input type="radio" name="living" value="4">个人基本生活事务（如饮食、二便）需要部分帮助或完全依赖他人帮助</label>
+        </div>
+        <label for="work">2.工作能力</label>
+        <div id="work">
+            <label><input type="radio" name="work" value="0">原来熟练的脑力工作或体力技巧性工作可照常进行</label>
+            <label><input type="radio" name="work" value="1">原来熟练的脑力工作或体力技巧性工作能力有所下降</label>
+            <label><input type="radio" name="work" value="2">原来熟练的脑力工作或体力技巧性工作明显不如以往，部分遗忘</label>
+            <label><input type="radio" name="work" value="3">对熟练工作只有一些片段保留，技能全部遗忘</label>
+            <label><input type="radio" name="work" value="4">对以往的知识或技能全部磨灭</label>
+        </div>
+        <label for="time_space">3.时间/空间定向</label>
+        <div id="time_space">
+            <label><input type="radio" name="time_space" value="0">时间观念（年、月、日、时）清楚；可单独出远门，能很快掌握新环境的方位</label>
+            <label><input type="radio" name="time_space" value="1">时间观念有些下降，年、月、日清楚，但有时相差几天；可单独来往于近街，知道现住地的名称和方位，但不知回家路线</label>
+            <label><input type="radio" name="time_space" value="2">时间观念较差，年、月、日不清楚，可知上半年或下半年；只能单独在家附近行动，对现住地只知名称，不知道方位</label>
+            <label><input type="radio" name="time_space" value="3">时间观念很差，年、月、日不清楚，可知上午或下午；只能在左邻右舍间串门，对现住地不知名称和方位</label>
+            <label><input type="radio" name="time_space" value="4">无时间观念；不能单独外出</label>
+        </div>
+        <label for="character">4.人物定向</label>
+        <div id="character">
+            <label><input type="radio" name="character" value="0">知道周围人们的关系，知道祖孙、叔伯、姑姨、侄子侄女等称谓的意义；可分辨陌生人的大致年龄和身份，可用适当称呼</label>
+            <label><input type="radio" name="character" value="1">只知家中亲密近亲的关系，不会分辨陌生人的大致年龄，不能称呼陌生人</label>
+            <label><input type="radio" name="character" value="2">只能称呼家中人，或只能照样称呼，不知其关系，不辨辈分</label>
+            <label><input type="radio" name="character" value="3">只认识常同住的亲人，可称呼子女或孙子女，可辨熟人和生人</label>
+            <label><input type="radio" name="character" value="4">只认识保护人，不辨熟人和生人</label>
+        </div>
+        <label for="social">5.社会交往能力</label>
+        <div id="social">
+            <label><input type="radio" name="social" value="0">参与社会，在社会环境有一定的适应能力，待人接物恰当</label>
+            <label><input type="radio" name="social" value="1">能适应单纯环境，主动接触人，初见面时难让人发现智力问题，不能理解隐喻语</label>
+            <label><input type="radio" name="social" value="2">脱离社会，可被动接触，不会主动待人，谈话中很多不适词句，容易上当受骗</label>
+            <label><input type="radio" name="social" value="3">勉强可与人交往，谈吐内容不清楚，表情不恰当</label>
+            <label><input type="radio" name="social" value="4">难以与人接触</label>
+        </div>
+
+        <button type="submit">提交</button>
+    </form>
+    <div>
+        <a href="index.html">
+            <button>返回主界面</button>
+        </a>
+    </div>
+</div>
+</body>
+<script>
+    document.getElementById("addForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const id=localStorage.getItem('id');
+        const living =document.querySelectorAll('input[name=living]');
+        let l;
+        living.forEach(radio => {
+            if (radio.checked) {
+                l = +radio.value;
+            }
+        });
+        const work =document.querySelectorAll('input[name=work]');
+        let w;
+        work.forEach(radio => {
+            if (radio.checked) {
+                w = +radio.value;
+            }
+        });
+        const time_space =document.querySelectorAll('input[name=time_space]');
+        let ts;
+        time_space.forEach(radio => {
+            if (radio.checked) {
+                ts = +radio.value;
+            }
+        });
+        const character =document.querySelectorAll('input[name=character]');
+        let c;
+        character.forEach(radio => {
+            if (radio.checked) {
+                c = +radio.value;
+            }
+        });
+        const social =document.querySelectorAll('input[name=social]');
+        let s;
+        social.forEach(radio => {
+            if (radio.checked) {
+                s = +radio.value;
+            }
+        });
+        const sum=l+w+ts+c+s;
+        let rank;
+        if(sum>=0&&sum<=2){
+            rank=0;
+        }else if(sum>=3&&sum<=7){
+            rank=1;
+        }else if(sum>=8&&sum<=13){
+            rank=2;
+        }else if(sum>=14&&sum<=20){
+            rank=3;
+        }
+
+        fetch("ass/add4", {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id:id,
+                score4: sum,
+                rank4: rank,
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.msg === 'success') {
+                    alert("提交成功");
+                    localStorage.setItem('b4',rank);
+                    console.log(data);
+                    location.href="ability.html";
+                } else {
+                    alert("提交失败(b3)");
+                }
+            })
+            .catch(error => {
+                alert("请求失败，请重试(b3)");
+                console.error(error);
+            });
+    })
+</script>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>历史记录</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+
+        button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        table {
+            margin: 0 auto;
+        }
+
+        table tr td {
+            width: 100px;
+            height: 30px;
+            border: 1px solid #000;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div id="tablecontainer">
+    <h1 style="text-align: center">历史记录</h1>
+    <div id="formTable">
+
+    </div>
+    <div>
+        <a href="index.html">
+            <button>返回主界面</button>
+        </a>
+    </div>
+</div>
+</body>
+<script>
+    display()
+    function display() {
+        fetch('ass/getAll' , {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application.json'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.msg === 'success') {
+                    generateTable(data.data);
+                } else {
+                    alert("此结果不存在");
+                }
+            })
+            .catch(error => {
+                alert("请求失败，请重试");
+                console.error(error);
+            });
+    }
+</script>
+<script>
+    function generateTable(data) {
+        const tableContainer = document.getElementById("formTable");
+        const table = document.createElement("table");
+        const tableBody = document.createElement("tbody");
+
+        let row = document.createElement("tr");
+        row.innerHTML = '<td>编号</td><td>姓名</td><td>日常生活活动</td><td>精神状态</td><td>感知觉与沟通</td><td>社会参与</td><td>能力等级</td>';
+        tableBody.appendChild(row);
+
+        for(let i=0;i<data.length;i++) {
+            row = document.createElement("tr");
+            row.innerHTML = `<td>${data[i].id}</td><td>${data[i].name}</td><td>${data[i].rank1}</td><td>${data[i].rank2}</td><td>${data[i].rank3}</td><td>${data[i].rank4}</td><td>${data[i].rank}</td>`;
+            tableBody.appendChild(row);
+
+            table.appendChild(tableBody);
+            tableContainer.appendChild(table);
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>能力评估报告</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #bdc3c7;
+            padding-bottom: 8px;
+            margin-top: 40px;
+            font-size: 1.8em;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 25px;
+            border: 1px solid #eaeaea;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 1.1em;
+        }
+
+        /* 设置缩进的 label */
+        .indent {
+            padding-left: 30px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ddd;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+<h1>能力评估报告</h1>
+<h2>一级指标分级</h2>
+<form id="result1">
+
+</form>
+<h2>老年人能力初步等级</h2>
+<form id="result2">
+
+</form>
+<h2>等级变更条款</h2>
+<form id="result3">
+    <label>1 有认知障碍/痴呆、精神疾病者，在原有能力级别上提高一个等级</label>
+    <label>2 近 30 天内发生过 2 次及以上跌倒、噎食、自杀、走失者，在原有能力级别上提高一个等级</label>
+    <label>3 处于昏迷状态者，直接评定为重度失能</label>
+    <label>4 若初步等级确定为“3 重度失能”，则不考虑上述 1-3 中各情况对最终等级的影响，等级不再提高</label>
+</form>
+<h2>老年人能力最终等级</h2>
+<form id="result4">
+    <label for="ability"></label>
+    <input type="text" id="ability" name="ability" required>
+    <button type="submit">完成</button>
+</form>
+<form id="result5">
+    <label>老年人能力初步等级划分标准</label>
+    <label>0 能力完好：</label>
+    <label class="indent">日常生活活动、精神状态、感知觉与沟通分级均为 0，社会参与分级为 0 或 1</label>
+    <label>1 轻度失能：</label>
+    <label class="indent">日常生活活动分级为 0，但精神状态、感知觉与沟通中至少一项分级为 1 及以上，或社会参与的分级为 2；</label>
+    <label class="indent">或日常生活活动分级为 1，精神状态、感知觉与沟通、社会参与中至少有一项的分级为 0 或 1</label>
+    <label>2 中度失能：</label>
+    <label class="indent">日常生活活动分级为 1，但精神状态、感知觉与沟通、社会参与均为 2，或有一项为 3；</label>
+    <label class="indent">或日常生活活动分级为 2，且精神状态、感知觉与沟通、社会参与中有 1-2 项的分级为 1 或 2</label>
+    <label>3 重度失能：</label>
+    <label class="indent">日常生活活动的分级为 3；</label>
+    <label class="indent">或日常生活活动、精神状态、感知觉与沟通、社会参与分级均为 2；</label>
+    <label class="indent">或日常生活活动分级为 2，且精神状态、感知觉与沟通、社会参与中至少有一项分级为 3</label>
+</form>
+<div>
+    <a href="index.html">
+        <button>返回主界面</button>
+    </a>
+</div>
+
+<script>
+    display();
+
+    function display() {
+        const id=localStorage.getItem('id')
+        fetch('ass/get', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id:id,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.msg === 'success') {
+                    generateTable(data.data);
+                } else {
+                    alert("此结果不存在");
+                }
+            })
+            .catch(error => {
+                alert("请求失败，请重试");
+                console.error(error);
+            });
+    }
+</script>
+<script>
+    function generateTable(data) {
+        const tableContainer = document.getElementById("result1");
+        const table = document.createElement("table");
+        const tableBody = document.createElement("tbody");
+
+        let row = document.createElement("tr");
+        row.innerHTML = '<td>日常生活活动</td><td>精神状态</td><td>感知觉与沟通</td><td>社会参与</td>';
+        tableBody.appendChild(row);
+
+        row = document.createElement("tr");
+        row.innerHTML = `<td>${data.rank1}</td><td>${data.rank2}</td><td>${data.rank3}</td><td>${data.rank4}</td>`;
+        tableBody.appendChild(row);
+
+        table.appendChild(tableBody);
+        tableContainer.appendChild(table);
+
+        const tableContainer1 = document.getElementById("result2");
+        const table1 = document.createElement("table");
+        const tableBody1 = document.createElement("tbody");
+
+        let row1 = document.createElement("tr");
+        row1.innerHTML = '<td>老年人能力初步等级</td>';
+        tableBody1.appendChild(row1);
+
+        row1 = document.createElement("tr");
+        row1.innerHTML = `<td>${data.rank}</td>`;
+        tableBody1.appendChild(row1);
+
+        table1.appendChild(tableBody1);
+        tableContainer1.appendChild(table1);
+    }
+</script>
+</body>
+<script>
+    document.getElementById("result4").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const id=localStorage.getItem('id');
+        const rank=document.getElementById("ability");
+        fetch('ass/add', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id:id,
+                rank:rank.value,
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.msg === 'success') {
+                    alert("已完成");
+                    location.href="report.html";
+                } else {
+                    alert("计算失败");
+                }
+            })
+            .catch(error => {
+                alert("请求失败，请重试");
+                console.error(error);
+            });
+    });
+</script>
+</html>
