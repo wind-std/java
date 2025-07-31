@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>家庭记账本 - 首页</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #2c3e50;
+      color: white;
+      padding: 20px 0;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid #34495e;
+    }
+    .sidebar-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .sidebar-header p {
+      margin: 5px 0 0;
+      font-size: 14px;
+      color: #bdc3c7;
+    }
+    .nav-menu {
+      list-style: none;
+      padding: 0;
+      margin: 20px 0;
+    }
+    .nav-menu li a {
+      display: block;
+      padding: 12px 20px;
+      color: #bdc3c7;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .nav-menu li a:hover, .nav-menu li a.active {
+      background-color: #34495e;
+      color: white;
+    }
+    .nav-menu li a i {
+      margin-right: 10px;
+    }
+    .main-content {
+      flex: 1;
+      padding: 20px;
+      background-color: #ecf0f1;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+      color: #2c3e50;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+    }
+    .user-info img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .user-name {
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    .logout-btn {
+      background: none;
+      border: none;
+      color: #e74c3c;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .card {
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .card-header h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #2c3e50;
+    }
+    .btn {
+      padding: 8px 15px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    .btn-danger {
+      background-color: #e74c3c;
+    }
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+    .btn-success {
+      background-color: #2ecc71;
+    }
+    .btn-success:hover {
+      background-color: #27ae60;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table th, table td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    table th {
+      background-color: #f8f9fa;
+      font-weight: bold;
+    }
+    table tr:hover {
+      background-color: #f5f5f5;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 7px;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 1;
+      color: white;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      border-radius: 10px;
+    }
+    .badge-income {
+      background-color: #2ecc71;
+    }
+    .badge-expense {
+      background-color: #e74c3c;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    .form-row {
+      display: flex;
+      gap: 15px;
+    }
+    .form-row .form-group {
+      flex: 1;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 5px;
+      width: 50%;
+      max-width: 600px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid #eee;
+    }
+    .summary-card {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .summary-item {
+      flex: 1;
+      padding: 15px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-right: 15px;
+    }
+    .summary-item:last-child {
+      margin-right: 0;
+    }
+    .summary-title {
+      font-size: 14px;
+      color: #7f8c8d;
+      margin-bottom: 10px;
+    }
+    .summary-value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .summary-income {
+      color: #2ecc71;
+    }
+    .summary-expense {
+      color: #e74c3c;
+    }
+    .summary-balance {
+      color: #3498db;
+    }
+    .chart-container {
+      height: 300px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- 侧边栏 -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>家庭记账本</h2>
+      <p id="current-family">家庭名称加载中...</p>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="#" class="active" data-page="dashboard"><i>📊</i> 收支概览</a></li>
+      <li><a href="#" data-page="records"><i>📝</i> 收支记录</a></li>
+      <li><a href="#" data-page="add-record"><i>➕</i> 添加记录</a></li>
+      <li><a href="#" data-page="reports"><i>📈</i> 收支报表</a></li>
+      <li><a href="#" data-page="account"><i>👤</i> 个人账号</a></li>
+      <li id="family-management-link" style="display: none;"><a href="#" data-page="family-management"><i>👨‍👩‍👧‍👦</i> 家庭管理</a></li>
+    </ul>
+  </div>
+
+  <!-- 主内容区 -->
+  <div class="main-content">
+    <div class="header">
+      <h1 id="page-title">收支概览</h1>
+      <div class="user-info">
+        <span class="user-name" id="current-user">加载中...</span>
+        <button class="logout-btn" id="logout-btn">退出登录</button>
+      </div>
+    </div>
+
+    <!-- 仪表盘页面 -->
+    <div id="dashboard-page" class="page-content">
+      <div class="summary-card">
+        <div class="summary-item">
+          <div class="summary-title">本月收入</div>
+          <div class="summary-value summary-income" id="month-income">¥0.00</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-title">本月支出</div>
+          <div class="summary-value summary-expense" id="month-expense">¥0.00</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-title">本月结余</div>
+          <div class="summary-value summary-balance" id="month-balance">¥0.00</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>最近收支记录</h2>
+          <button class="btn" id="view-all-records">查看全部</button>
+        </div>
+        <table id="recent-records">
+          <thead>
+          <tr>
+            <th>日期</th>
+            <th>类型</th>
+            <th>金额</th>
+            <th>分类</th>
+            <th>备注</th>
+            <th>操作人</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 动态加载数据 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 收支记录页面 -->
+    <div id="records-page" class="page-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2>收支记录</h2>
+          <div>
+            <select id="record-year">
+              <!-- 动态加载年份 -->
+            </select>
+            <select id="record-month">
+              <option value="0">全年</option>
+              <option value="1">1月</option>
+              <!-- 其他月份 -->
+            </select>
+            <button class="btn" id="filter-records">筛选</button>
+          </div>
+        </div>
+        <table id="all-records">
+          <thead>
+          <tr>
+            <th>日期</th>
+            <th>类型</th>
+            <th>金额</th>
+            <th>分类</th>
+            <th>备注</th>
+            <th>操作人</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 动态加载数据 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 添加记录页面 -->
+    <div id="add-record-page" class="page-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2>添加收支记录</h2>
+        </div>
+        <form id="add-record-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="record-type">类型</label>
+              <select id="record-type" required>
+                <option value="INCOME">收入</option>
+                <option value="EXPENSE">支出</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="record-amount">金额</label>
+              <input type="number" id="record-amount" step="0.01" min="0" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="record-category">分类</label>
+              <select id="record-category" required>
+                <option value="工资">工资</option>
+                <option value="奖金">奖金</option>
+                <option value="投资">投资</option>
+                <option value="餐饮">餐饮</option>
+                <option value="购物">购物</option>
+                <option value="交通">交通</option>
+                <option value="娱乐">娱乐</option>
+                <option value="其他">其他</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="record-date">日期</label>
+              <input type="date" id="record-date" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="record-description">备注</label>
+            <textarea id="record-description" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">添加记录</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 收支报表页面 -->
+    <div id="reports-page" class="page-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2>收支报表</h2>
+          <div>
+            <select id="report-type">
+              <option value="month">月度报表</option>
+              <option value="year">年度报表</option>
+            </select>
+            <select id="report-year">
+              <!-- 动态加载年份 -->
+            </select>
+            <select id="report-month">
+              <option value="1">1月</option>
+              <!-- 其他月份 -->
+            </select>
+            <button class="btn" id="generate-report">生成报表</button>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="report-chart"></canvas>
+        </div>
+        <table id="report-table">
+          <thead>
+          <tr>
+            <th>分类</th>
+            <th>收入</th>
+            <th>支出</th>
+            <th>净额</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 动态加载数据 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 个人账号页面 -->
+    <div id="account-page" class="page-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2>个人账号管理</h2>
+        </div>
+        <form id="account-form">
+          <div class="form-group">
+            <label for="account-username">用户名</label>
+            <input type="text" id="account-username" readonly>
+          </div>
+          <div class="form-group">
+            <label for="account-nickname">昵称</label>
+            <input type="text" id="account-nickname" required>
+          </div>
+          <div class="form-group">
+            <label for="account-current-password">当前密码</label>
+            <input type="password" id="account-current-password">
+          </div>
+          <div class="form-group">
+            <label for="account-new-password">新密码</label>
+            <input type="password" id="account-new-password">
+          </div>
+          <div class="form-group">
+            <label for="account-confirm-password">确认新密码</label>
+            <input type="password" id="account-confirm-password">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn">保存更改</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- 家庭管理页面 -->
+    <div id="family-management-page" class="page-content" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <h2>家庭成员管理</h2>
+        </div>
+        <table id="family-members">
+          <thead>
+          <tr>
+            <th>用户名</th>
+            <th>昵称</th>
+            <th>角色</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 动态加载数据 -->
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <h2>待审核成员</h2>
+        </div>
+        <table id="pending-members">
+          <thead>
+          <tr>
+            <th>用户名</th>
+            <th>昵称</th>
+            <th>申请加入家庭</th>
+            <th>申请时间</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!-- 动态加载 -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 编辑记录模态框 -->
+<div id="edit-record-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>编辑收支记录</h2>
+      <button class="close-btn">&times;</button>
+    </div>
+    <form id="edit-record-form">
+      <input type="hidden" id="edit-record-id">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-record-type">类型</label>
+          <select id="edit-record-type" required>
+            <option value="INCOME">收入</option>
+            <option value="EXPENSE">支出</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-record-amount">金额</label>
+          <input type="number" id="edit-record-amount" step="0.01" min="0" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="edit-record-category">分类</label>
+          <select id="edit-record-category" required>
+            <option value="工资">工资</option>
+            <option value="奖金">奖金</option>
+            <option value="投资">投资</option>
+            <option value="餐饮">餐饮</option>
+            <option value="购物">购物</option>
+            <option value="交通">交通</option>
+            <option value="娱乐">娱乐</option>
+            <option value="其他">其他</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="edit-record-date">日期</label>
+          <input type="date" id="edit-record-date" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="edit-record-description">备注</label>
+        <textarea id="edit-record-description" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" id="delete-record-btn">删除记录</button>
+        <button type="submit" class="btn">保存更改</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // 全局变量
+  let currentUser = null;
+  let isAdmin = false;
+  let reportChart = null;
+  let familyList = []; // 存储家庭列表
+
+  // DOM加载完成后执行
+  document.addEventListener('DOMContentLoaded', function() {
+    // 检查登录状态
+    checkLoginStatus();
+
+    // 初始化页面
+    initPage();
+
+    // 绑定事件
+    bindEvents();
+
+    // 加载家庭列表（用于注册审核）
+    loadFamilyList();
+  });
+
+  // 检查登录状态
+  function checkLoginStatus() {
+    fetch('/api/user/current')
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                currentUser = data.data;
+                isAdmin = currentUser.role === 'ADMIN';
+                updateUserInfo();
+                loadDashboardData();
+
+                // 如果是管理员，显示家庭管理菜单
+                if (isAdmin) {
+                  document.getElementById('family-management-link').style.display = 'block';
+                  // 加载待审核成员
+                  loadPendingMembers();
+                }
+              } else {
+                // 未登录，跳转到登录页面
+                window.location.href = 'login.html';
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              window.location.href = 'login.html';
+            });
+  }
+
+  // 加载家庭列表
+  function loadFamilyList() {
+    fetch('/api/user/families')
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                familyList = data.data;
+                // 更新注册页面的家庭选择器（如果存在）
+                const familySelect = document.getElementById('family-select');
+                if (familySelect) {
+                  familySelect.innerHTML = '';
+                  data.data.forEach(family => {
+                    const option = document.createElement('option');
+                    option.value = family.id;
+                    option.textContent = family.name;
+                    familySelect.appendChild(option);
+                  });
+                }
+              }
+            })
+            .catch(error => {
+              console.error('加载家庭列表失败:', error);
+            });
+  }
+
+  // 加载待审核成员（管理员专用）
+  function loadPendingMembers() {
+    fetch('/api/user/pending-members')
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                updatePendingMembersTable(data.data);
+              }
+            })
+            .catch(error => {
+              console.error('加载待审核成员失败:', error);
+            });
+  }
+
+  // 更新待审核成员表格
+  function updatePendingMembersTable(members) {
+    const tbody = document.querySelector('#pending-members tbody');
+    tbody.innerHTML = '';
+
+    if (members.length === 0) {
+      const row = document.createElement('tr');
+      row.innerHTML = '<td colspan="5" style="text-align: center;">暂无待审核成员</td>';
+      tbody.appendChild(row);
+      return;
+    }
+
+    members.forEach(member => {
+      const row = document.createElement('tr');
+      const registerDate = new Date(member.createTime);
+      const formattedDate = `${registerDate.getFullYear()}-${(registerDate.getMonth() + 1).toString().padStart(2, '0')}-${registerDate.getDate().toString().padStart(2, '0')}`;
+
+      row.innerHTML = `
+                <td>${member.username}</td>
+                <td>${member.nickname}</td>
+                <td>${familyList.find(f => f.id === member.familyId)?.name || member.familyId}</td>
+                <td>${formattedDate}</td>
+                <td>
+                    <button class="btn btn-success approve-btn" data-id="${member.id}">批准</button>
+                    <button class="btn btn-danger reject-btn" data-id="${member.id}">拒绝</button>
+                </td>
+            `;
+      tbody.appendChild(row);
+    });
+
+    // 绑定批准/拒绝按钮事件
+    document.querySelectorAll('.approve-btn').forEach(btn => {
+      btn.addEventListener('click', () => processMemberApplication(btn.dataset.id, true));
+    });
+
+    document.querySelectorAll('.reject-btn').forEach(btn => {
+      btn.addEventListener('click', () => processMemberApplication(btn.dataset.id, false));
+    });
+  }
+
+  // 处理成员审核
+  function processMemberApplication(userId, approve) {
+    if (!confirm(`确定要${approve ? '批准' : '拒绝'}该成员的申请吗？`)) {
+      return;
+    }
+
+    fetch(`/api/user/approve-member/${userId}?approve=${approve}`, {
+      method: 'POST'
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                alert(`已${approve ? '批准' : '拒绝'}成员申请`);
+                loadPendingMembers();
+                loadFamilyMembers(); // 刷新家庭成员列表
+              } else {
+                alert(`操作失败: ${data.message}`);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('操作失败，请稍后重试');
+            });
+  }
+
+  // 初始化页面元素
+  function initPage() {
+    // 初始化日期选择器
+    initDatePickers();
+
+    // 初始化年份选择器
+    initDateSelectors();
+
+    // 设置默认日期为今天
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('record-date').value = today;
+  }
+
+  // 初始化日期选择器
+  function initDatePickers() {
+    const dateInputs = document.querySelectorAll('input[type="date"]');
+    const today = new Date().toISOString().split('T')[0];
+
+    dateInputs.forEach(input => {
+      input.value = today;
+      input.max = today; // 不能选择未来的日期
+    });
+  }
+
+  // 初始化年份选择器
+  function initYearSelectors() {
+    const currentYear = new Date().getFullYear();
+    const yearSelectors = [
+      document.getElementById('record-year'),
+      document.getElementById('report-year')
+    ];
+
+    yearSelectors.forEach(selector => {
+      if (selector) {
+        // 添加最近5年的选项
+        for (let year = currentYear; year >= currentYear - 4; year--) {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year + '年';
+          selector.appendChild(option);
+        }
+
+        // 设置默认值为当前年份
+        selector.value = currentYear;
+      }
+    });
+
+    // 初始化月份选择器
+    const monthSelectors = [
+      document.getElementById('record-month'),
+      document.getElementById('report-month')
+    ];
+
+    monthSelectors.forEach(selector => {
+      if (selector) {
+        // 设置默认值为当前月份
+        const currentMonth = new Date().getMonth() + 1;
+        selector.value = currentMonth;
+      }
+    });
+  }
+
+  // 绑定事件
+  function bindEvents() {
+    // 关闭模态框按钮
+    document.querySelector('.modal .close-btn').addEventListener('click', function() {
+      document.getElementById('edit-record-modal').style.display = 'none';
+    });
+
+    // 点击模态框外部关闭
+    window.addEventListener('click', function(e) {
+      const modal = document.getElementById('edit-record-modal');
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // 编辑记录表单提交
+    document.getElementById('edit-record-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      updateRecord();
+    });
+
+    // 删除记录按钮
+    document.getElementById('delete-record-btn').addEventListener('click', function() {
+      deleteRecord();
+    });
+
+    // 导航菜单点击事件
+    document.querySelectorAll('.nav-menu a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+
+        // 移除所有active类
+        document.querySelectorAll('.nav-menu a').forEach(item => {
+          item.classList.remove('active');
+        });
+
+        // 添加active类到当前点击的链接
+        this.classList.add('active');
+
+        // 显示对应的页面
+        const pageId = this.getAttribute('data-page') + '-page';
+        document.querySelectorAll('.page-content').forEach(page => {
+          page.style.display = 'none';
+        });
+        document.getElementById(pageId).style.display = 'block';
+
+        // 更新页面标题
+        document.getElementById('page-title').textContent = this.textContent.trim();
+
+        // 根据需要加载数据
+        switch (this.getAttribute('data-page')) {
+          case 'dashboard':
+            loadDashboardData();
+            break;
+          case 'records':
+            loadRecordsData();
+            break;
+          case 'reports':
+            loadReportData();
+            break;
+          case 'family-management':
+            if (isAdmin) {
+              loadFamilyMembers();
+              loadPendingMembers();
+            }
+            break;
+        }
+      });
+    });
+
+    // 退出登录按钮
+    document.getElementById('logout-btn').addEventListener('click', function() {
+      fetch('/api/user/logout', {
+        method: 'POST'
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.code === 200) {
+                  window.location.href = 'login.html';
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+              });
+    });
+
+    // 添加记录表单提交
+    document.getElementById('add-record-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      addNewRecord();
+    });
+
+    // 查看全部记录按钮
+    document.getElementById('view-all-records').addEventListener('click', function() {
+      // 切换到记录页面
+      document.querySelector('.nav-menu a[data-page="records"]').click();
+    });
+
+    // 筛选记录按钮
+    document.getElementById('filter-records').addEventListener('click', function() {
+      loadRecordsData();
+    });
+
+    // 生成报表按钮
+    document.getElementById('generate-report').addEventListener('click', function() {
+      loadReportData();
+    });
+
+    // 个人账号表单提交
+    document.getElementById('account-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      updateAccountInfo();
+    });
+
+    // 报表类型切换事件
+    document.getElementById('report-type').addEventListener('change', function() {
+      const monthSelector = document.getElementById('report-month');
+      monthSelector.style.display = this.value === 'month' ? 'block' : 'none';
+    });
+  }
+  // 加载仪表盘数据
+  function loadDashboardData() {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth() + 1;
+
+    // 获取本月收支记录
+    fetch(`/api/record/month/${year}/${month}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                const records = data.data;
+                updateRecentRecordsTable(records.slice(0, 5)); // 只显示最近5条记录
+
+                // 计算本月收入和支出
+                let income = 0;
+                let expense = 0;
+
+                records.forEach(record => {
+                  if (record.type === 'INCOME') {
+                    income += record.amount;
+                  } else {
+                    expense += record.amount;
+                  }
+                });
+
+                // 更新摘要卡片
+                document.getElementById('month-income').textContent = '¥' + income.toFixed(2);
+                document.getElementById('month-expense').textContent = '¥' + expense.toFixed(2);
+                document.getElementById('month-balance').textContent = '¥' + (income - expense).toFixed(2);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  }
+
+  // 更新最近记录表格
+  function updateRecentRecordsTable(records) {
+    const tbody = document.querySelector('#recent-records tbody');
+    tbody.innerHTML = '';
+
+    if (records.length === 0) {
+      const row = document.createElement('tr');
+      row.innerHTML = '<td colspan="6" style="text-align: center;">暂无记录</td>';
+      tbody.appendChild(row);
+      return;
+    }
+
+    records.forEach(record => {
+      const row = document.createElement('tr');
+
+      // 格式化日期
+      const recordDate = new Date(record.recordDate);
+      const formattedDate = `${recordDate.getFullYear()}-${(recordDate.getMonth() + 1).toString().padStart(2, '0')}-${recordDate.getDate().toString().padStart(2, '0')}`;
+
+      // 格式化类型
+      const typeBadge = record.type === 'INCOME' ?
+              '<span class="badge badge-income">收入</span>' :
+              '<span class="badge badge-expense">支出</span>';
+
+      row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${typeBadge}</td>
+                    <td>¥${record.amount.toFixed(2)}</td>
+                    <td>${record.category}</td>
+                    <td>${record.description || '-'}</td>
+                    <td>${record.nickname}</td>
+                `;
+
+      tbody.appendChild(row);
+    });
+  }
+
+  // 加载记录数据
+  function loadRecordsData() {
+    const year = parseInt(document.getElementById('record-year').value);
+    const month = parseInt(document.getElementById('record-month').value);
+
+    let url = `/api/record/year/${year}`;
+    if (month > 0) {
+      url = `/api/record/month/${year}/${month}`;
+    }
+
+    fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                updateAllRecordsTable(data.data);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  }
+
+  // 更新所有记录表格
+  function updateAllRecordsTable(records) {
+    const tbody = document.querySelector('#all-records tbody');
+    tbody.innerHTML = '';
+
+    if (records.length === 0) {
+      const row = document.createElement('tr');
+      row.innerHTML = '<td colspan="7" style="text-align: center;">暂无记录</td>';
+      tbody.appendChild(row);
+      return;
+    }
+
+    records.forEach(record => {
+      const row = document.createElement('tr');
+
+      // 格式化日期
+      const recordDate = new Date(record.recordDate);
+      const formattedDate = `${recordDate.getFullYear()}-${(recordDate.getMonth() + 1).toString().padStart(2, '0')}-${recordDate.getDate().toString().padStart(2, '0')}`;
+
+      // 格式化类型
+      const typeBadge = record.type === 'INCOME' ?
+              '<span class="badge badge-income">收入</span>' :
+              '<span class="badge badge-expense">支出</span>';
+
+      row.innerHTML = `
+                    <td>${formattedDate}</td>
+                    <td>${typeBadge}</td>
+                    <td>¥${record.amount.toFixed(2)}</td>
+                    <td>${record.category}</td>
+                    <td>${record.description || '-'}</td>
+                    <td>${record.nickname}</td>
+                    <td>
+                        <button class="btn edit-record-btn" data-id="${record.id}">编辑</button>
+                    </td>
+                `;
+
+      tbody.appendChild(row);
+    });
+
+    // 绑定编辑按钮事件
+    document.querySelectorAll('.edit-record-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const recordId = parseInt(this.getAttribute('data-id'));
+        showEditRecordModal(recordId);
+      });
+    });
+  }
+
+  // 添加新记录
+  function addNewRecord() {
+    const record = {
+      type: document.getElementById('record-type').value,
+      amount: parseFloat(document.getElementById('record-amount').value),
+      category: document.getElementById('record-category').value,
+      description: document.getElementById('record-description').value,
+      recordDate: document.getElementById('record-date').value
+    };
+
+    fetch('/api/record/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(record)
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                alert('记录添加成功');
+                document.getElementById('add-record-form').reset();
+                loadDashboardData();
+              } else {
+                alert('添加失败: ' + data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('添加失败，请稍后重试');
+            });
+  }
+
+  // 显示编辑记录模态框
+  function showEditRecordModal(recordId) {
+    fetch(`/api/record/get/${recordId}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                const record = data.data;
+
+                // 填充表单
+                document.getElementById('edit-record-id').value = record.id;
+                document.getElementById('edit-record-type').value = record.type;
+                document.getElementById('edit-record-amount').value = record.amount;
+                document.getElementById('edit-record-category').value = record.category;
+                document.getElementById('edit-record-description').value = record.description || '';
+
+                // 格式化日期
+                const recordDate = new Date(record.recordDate);
+                const formattedDate = `${recordDate.getFullYear()}-${(recordDate.getMonth() + 1).toString().padStart(2, '0')}-${recordDate.getDate().toString().padStart(2, '0')}`;
+                document.getElementById('edit-record-date').value = formattedDate;
+
+                // 显示模态框
+                document.getElementById('edit-record-modal').style.display = 'block';
+
+                // 如果不是管理员，隐藏删除按钮
+                if (!isAdmin) {
+                  document.getElementById('delete-record-btn').style.display = 'none';
+                } else {
+                  document.getElementById('delete-record-btn').style.display = 'block';
+                }
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  }
+
+  // 更新记录
+  function updateRecord() {
+    console.log("表单提交触发");
+    const record = {
+      id: parseInt(document.getElementById('edit-record-id').value),
+      type: document.getElementById('edit-record-type').value,
+      amount: parseFloat(document.getElementById('edit-record-amount').value),
+      category: document.getElementById('edit-record-category').value,
+      description: document.getElementById('edit-record-description').value,
+      recordDate: document.getElementById('edit-record-date').value
+    };
+
+    fetch('/api/record/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(record)
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                alert('记录更新成功');
+                document.getElementById('edit-record-modal').style.display = 'none';
+                loadRecordsData();
+
+              } else {
+                alert('更新失败: ' + data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('更新失败，请稍后重试');
+            });
+  }
+
+  // 删除记录
+  function deleteRecord() {
+    const recordId = parseInt(document.getElementById('edit-record-id').value);
+
+    if (!confirm('确定要删除这条记录吗？')) {
+      return;
+    }
+
+    fetch(`/api/record/delete/${recordId}`, {
+      method: 'POST'
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                alert('记录删除成功');
+                document.getElementById('edit-record-modal').style.display = 'none';
+                loadRecordsData();
+                loadDashboardData();
+              } else {
+                alert('删除失败: ' + data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('删除失败，请稍后重试');
+            });
+  }
+
+  // 加载报表数据
+  function loadReportData() {
+    const reportType = document.getElementById('report-type').value;
+    const year = parseInt(document.getElementById('report-year').value);
+    const month = parseInt(document.getElementById('report-month').value);
+
+    let url = `/api/record/summary/year/${year}`;
+    if (reportType === 'month') {
+      url = `/api/record/summary/month/${year}/${month}`;
+    }
+
+    fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                updateReport(data.data, reportType);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  }
+
+  // 更新报表
+  function updateReport(summaryData, reportType) {
+    // 准备数据
+    const categories = [];
+    const incomeData = [];
+    const expenseData = [];
+
+    // 按分类汇总
+    const categoryMap = {};
+
+    summaryData.forEach(item => {
+      if (!categoryMap[item.category]) {
+        categoryMap[item.category] = {
+          income: 0,
+          expense: 0
+        };
+      }
+
+      if (item.type === 'INCOME') {
+        categoryMap[item.category].income += item.amount;
+      } else {
+        categoryMap[item.category].expense += item.amount;
+      }
+    });
+
+    // 填充数据
+    for (const category in categoryMap) {
+      categories.push(category);
+      incomeData.push(categoryMap[category].income);
+      expenseData.push(categoryMap[category].expense);
+    }
+
+    // 更新表格
+    updateReportTable(categoryMap);
+
+    // 更新图表
+    updateReportChart(categories, incomeData, expenseData, reportType);
+  }
+
+  // 更新报表表格
+  function updateReportTable(categoryMap) {
+    const tbody = document.querySelector('#report-table tbody');
+    tbody.innerHTML = '';
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    for (const category in categoryMap) {
+      const row = document.createElement('tr');
+      const income = categoryMap[category].income;
+      const expense = categoryMap[category].expense;
+      const net = income - expense;
+
+      totalIncome += income;
+      totalExpense += expense;
+
+      row.innerHTML = `
+                    <td>${category}</td>
+                    <td>${income > 0 ? '¥' + income.toFixed(2) : '-'}</td>
+                    <td>${expense > 0 ? '¥' + expense.toFixed(2) : '-'}</td>
+                    <td>¥${net.toFixed(2)}</td>
+                `;
+
+      tbody.appendChild(row);
+    }
+
+    // 添加总计行
+    const totalRow = document.createElement('tr');
+    totalRow.style.fontWeight = 'bold';
+    totalRow.innerHTML = `
+                <td>总计</td>
+                <td>¥${totalIncome.toFixed(2)}</td>
+                <td>¥${totalExpense.toFixed(2)}</td>
+                <td>¥${(totalIncome - totalExpense).toFixed(2)}</td>
+            `;
+    tbody.appendChild(totalRow);
+  }
+
+  // 更新报表图表
+  function updateReportChart(categories, incomeData, expenseData, reportType) {
+    const ctx = document.getElementById('report-chart').getContext('2d');
+
+    // 销毁之前的图表
+    if (reportChart) {
+      reportChart.destroy();
+    }
+
+    reportChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: categories,
+        datasets: [
+          {
+            label: '收入',
+            data: incomeData,
+            backgroundColor: 'rgba(46, 204, 113, 0.7)',
+            borderColor: 'rgba(46, 204, 113, 1)',
+            borderWidth: 1
+          },
+          {
+            label: '支出',
+            data: expenseData,
+            backgroundColor: 'rgba(231, 76, 60, 0.7)',
+            borderColor: 'rgba(231, 76, 60, 1)',
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: reportType === 'month' ? '月度收支报表' : '年度收支报表'
+          }
+        }
+      }
+    });
+  }
+
+  // 更新个人账号信息
+  function updateAccountInfo() {
+    const currentPassword = document.getElementById('account-current-password').value;
+    const newPassword = document.getElementById('account-new-password').value;
+    const confirmPassword = document.getElementById('account-confirm-password').value;
+
+    // 验证密码
+    if (newPassword && newPassword !== confirmPassword) {
+      alert('新密码和确认密码不一致');
+      return;
+    }
+
+    const user = {
+      nickname: document.getElementById('account-nickname').value
+    };
+
+    // 如果有新密码，需要验证当前密码
+    if (newPassword) {
+      if (!currentPassword) {
+        alert('请输入当前密码');
+        return;
+      }
+      user.password = newPassword;
+    }
+
+    fetch('/api/user/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                alert('账号信息更新成功');
+                // 更新当前用户信息
+                currentUser.nickname = user.nickname;
+                updateUserInfo();
+                // 清空密码字段
+                document.getElementById('account-current-password').value = '';
+                document.getElementById('account-new-password').value = '';
+                document.getElementById('account-confirm-password').value = '';
+              } else {
+                alert('更新失败: ' + data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('更新失败，请稍后重试');
+            });
+  }
+
+  // 加载家庭成员
+  function loadFamilyMembers() {
+    fetch('/api/user/family-members')
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                updateFamilyMembersTable(data.data);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  }
+
+  // 更新家庭成员表格
+  function updateFamilyMembersTable(members) {
+    const tbody = document.querySelector('#family-members tbody');
+    tbody.innerHTML = '';
+
+    members.forEach(member => {
+      const row = document.createElement('tr');
+
+      row.innerHTML = `
+                    <td>${member.username}</td>
+                    <td>${member.nickname}</td>
+                    <td>${member.role === 'ADMIN' ? '家庭主管' : '家庭成员'}</td>
+                    <td>
+                        <button class="btn reset-password-btn" data-id="${member.id}">重置密码</button>
+                    </td>
+                `;
+
+      tbody.appendChild(row);
+    });
+
+    // 绑定重置密码按钮事件
+    document.querySelectorAll('.reset-password-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const userId = parseInt(this.getAttribute('data-id'));
+        resetMemberPassword(userId);
+      });
+    });
+  }
+
+  // 初始化年份和月份选择器
+  function initDateSelectors() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1; // 月份从0开始
+
+    // 初始化年份选择器（已有）
+    const yearSelectors = [
+      document.getElementById('record-year'),
+      document.getElementById('report-year')
+    ];
+
+    yearSelectors.forEach(selector => {
+      if (selector) {
+        selector.innerHTML = ''; // 清空现有选项
+        // 添加最近5年的选项
+        for (let year = currentYear; year >= currentYear - 4; year--) {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year + '年';
+          selector.appendChild(option);
+        }
+      }
+    });
+
+    // 初始化月份选择器（新增）
+    const monthSelectors = [
+      document.getElementById('record-month'),
+      document.getElementById('report-month')
+    ];
+
+    monthSelectors.forEach(selector => {
+      if (selector) {
+        selector.innerHTML = ''; // 清空现有选项
+
+        // 如果是记录筛选，添加"全年"选项
+        if (selector.id === 'record-month') {
+          const allYearOption = document.createElement('option');
+          allYearOption.value = '0';
+          allYearOption.textContent = '全年';
+          selector.appendChild(allYearOption);
+        }
+
+        // 添加1-12月选项
+        for (let month = 1; month <= 12; month++) {
+          const option = document.createElement('option');
+          option.value = month;
+          option.textContent = month + '月';
+          selector.appendChild(option);
+        }
+
+        // 设置默认值为当前月份
+        selector.value = currentMonth;
+      }
+    });
+  }
+
+  // 重置成员密码
+  function resetMemberPassword(userId) {
+    if (!confirm('确定要将该成员的密码重置为123456吗？')) {
+      return;
+    }
+
+    fetch(`/api/user/reset-password/${userId}`, {
+      method: 'POST'
+    })
+            .then(response => response.json())
+            .then(data => {
+              if (data.code === 200) {
+                alert('密码重置成功');
+              } else {
+                alert('重置失败: ' + data.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('重置失败，请稍后重试');
+            });
+  }
+
+  function updateUserInfo() {
+    if (currentUser) {
+      document.getElementById('current-user').textContent = currentUser.nickname;
+      document.getElementById('current-family').textContent = '家庭: ' +
+              (familyList.find(f => f.id === currentUser.familyId)?.name || currentUser.familyId);
+
+      // 个人账号页面填充数据
+      document.getElementById('account-username').value = currentUser.username;
+      document.getElementById('account-nickname').value = currentUser.nickname;
+    }
+  }
+</script>
+</body>
+</html>
